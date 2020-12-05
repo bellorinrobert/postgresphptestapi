@@ -11,7 +11,7 @@ if ((!defined('CONST_INCLUDE_KEY')) || (CONST_INCLUDE_KEY !== 'd4e2ad09-b1c3-4d7
 class API_Handler {
 
 	private $function_map;
-
+	private $apiSecretKey = "3uhdyur92jdjhfgkj2893";
 	//--------------------------------------------------------------------------------------------------------------------
 	public function __construct() {
 		$this->loadFunctionMap();
@@ -19,7 +19,6 @@ class API_Handler {
 
 	//----------------------------------------------------------------------------------------------------------------------
 	public function execCommand($varFunctionName, $varFunctionParams) {
-
 		// get the actual function name (if necessary) and the class it belongs to.
 		$returnArray = $this->getCommand($varFunctionName);
 
@@ -59,12 +58,12 @@ class API_Handler {
 	private function getToken($varParams) {
 
 		// api key is required
-		if (!isset($varParams['api_key']) || empty($varParams['api_key'])) {
+		if (!isset($varParams['apiKey']) || empty($varParams['apiKey'])) {
 			$returnArray = App_Response::getResponse('400');
 			return $returnArray;
 		}
 
-		$apiKey = $varParams['api_key'];
+		$apiKey = $varParams['apiKey'];
 
 		// get the api key object
 		$cApp_API_Key = new App_API_Key;
@@ -75,13 +74,11 @@ class API_Handler {
 			return $res;
 		}
 
-		$apiSecretKey = $res['dataArray'][0]['api_secret_key'];
-
 		$payloadArray = array();
-		$token = JWT::encode($payloadArray, $apiSecretKey);
+		$token = JWT::encode($payloadArray, $this->apiSecretKey);
 
 		$returnArray = App_Response::getResponse('200');
-		$returnArray['dataArray'] = array("token" => $token);
+		$returnArray['data'] = array("token" => $token);
 
 		return $returnArray;
 	}
@@ -97,12 +94,12 @@ class API_Handler {
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------
-	public function validateRequest($varAPIKey = NULL, $varToken = NULL) {
-
+	public function validateRequest($varToken = NULL) {
+		$returnArray = null;
 		if ($varToken) {
 			// decode the token
 			try {
-				$payload = JWT::decode($varToken, $apiSecretKey, array('HS256'));
+				$payload = JWT::decode($varToken, $this->apiSecretKey, array('HS256'));
 			}
 			catch(Exception $e) {
 				$returnArray = App_Response::getResponse('403');
@@ -124,29 +121,8 @@ class API_Handler {
 			$returnArray = App_Response::getResponse('200');
 			return $returnArray;
 		}
-
-		// this function requires and API key and token parameters
-		if (!$varAPIKey) {
-			$returnArray = App_Response::getResponse('403');
-			$returnArray['responseDescription'] .= " Missing API key";
-			return $returnArray;
-		}
-
-		// get the api key object
-		$cApp_API_Key = new App_API_Key;
-		$res = $cApp_API_Key->getRecordByAPIKey($varAPIKey);
-		unset($cApp_API_Key);
-
-		// if anything looks sketchy, bail.
-		if ($res['response'] !== '200') {
-			return $res;
-		}
-
-		// get the client API secret key.
-		$apiSecretKey = $res['dataArray'][0]['api_secret_key'];
-
-		
-
+		$returnArray = App_Response::getResponse('402');
+		return $returnArray;;
 	}
 
 } // end of class

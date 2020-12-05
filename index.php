@@ -23,11 +23,17 @@ if (in_array($requestMethod, ["GET", "POST", "PUT", "DELETE", "OPTIONS"])) {
 	$requestMethodArray = array();
 	$requestMethodArray = $_REQUEST;
 	$apiFunctionName = trim($_SERVER["PATH_INFO"], '/');
-	// echo $apiFunctionName;
-	// var_dump($_SERVER["HTTP_AUTHORIZATION"]);
+
+	// var_dump($_REQUEST);
+	// var_dump($_POST);
+	// var_dump($_GET);
+	$json = file_get_contents('php://input');
+	$postParams = json_decode($json);
+	$postParams = (array) $postParams;
+	// var_dump($postParams->name);
 	// exit;
-	// exit;
-	if (isset($requestMethodArray['apiKey']))				{$apiKey = $requestMethodArray['apiKey'];}  
+
+	if (isset($postParams["apiKey"]))				{$apiKey = $postParams["apiKey"];}  
 	if (isset($_SERVER["HTTP_AUTHORIZATION"]))				{$apiToken = $_SERVER["HTTP_AUTHORIZATION"];}
 	if (isset($_SERVER["PATH_INFO"]))		{$functionName = trim($_SERVER["PATH_INFO"], '/');}
 	if (isset($requestMethodArray['apiFunctionParams']))	{$functionParams = $requestMethodArray['apiFunctionParams'];}
@@ -43,22 +49,21 @@ if (in_array($requestMethod, ["GET", "POST", "PUT", "DELETE", "OPTIONS"])) {
 	// Requests should always include the API Key and JSON Web Token *UNLESS* this request is to 
 	// to get a token. In that case, no validation is required here as the function itself requires 
 	// the API Key as a parameter and will do its own validation.
-	if ($functionName === 'getToken') {
+	if ($functionName === 'getToken' && $requestMethod === 'POST') {
         // default validation to a good response
 		$res = App_Response::getResponse('200');
 	} else {
-		$res = $cApiHandler->validateRequest($apiKey, $apiToken);
+		$res = $cApiHandler->validateRequest($apiToken);
 		// print_r($res);exit;
 	}
-
 	if ($res['response'] !== '200') {
         // if request is not valid, then raise a bad message.
 		$returnArray = json_encode($res);
 		echo($returnArray);
 	}
-	else { 
+	else {
         // if request is valid, execute command
-		$res = $cApiHandler->execCommand($functionName, $functionParams);
+		$res = $cApiHandler->execCommand($functionName, $postParams);
 
 		// encode and return
 		$returnArray = json_encode($res, JSON_PRETTY_PRINT);

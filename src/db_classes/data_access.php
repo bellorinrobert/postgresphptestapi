@@ -19,23 +19,17 @@ abstract class Data_Access {
 		// establish a database connection
 		if (!isset($GLOBALS['dbConnection'])) {
 			$options = "host=".CONST_DB_HOST." port=".CONST_DB_PORT." dbname=".CONST_DB_SCHEMA." user=".CONST_DB_USERNAME." password=".CONST_DB_PASSWORD;
-			$GLOBALS['dbConnection'] = pg_connect($options);
+			try {
+				$GLOBALS['dbConnection'] = pg_connect($options);
+				$responseArray = App_Response::getResponse('200');
+				$responseArray['message'] = 'Database connection successful.';
+
+			} catch (Throwable $th) {
+				$responseArray = App_Response::getResponse('500');
+				$responseArray['message'] = "Postgres error: connection failed";
+			}
 		}
-
-		// if an error occurred, record it
-		if ($GLOBALS['dbConnection']->connect_errno) {
-			// if an error occurred, raise it.
-			$responseArray = App_Response::getResponse('500');
-			$responseArray['message'] = 'Postgres error: ' . $GLOBALS['dbConnection']->connect_errno . ' ' . $GLOBALS['dbConnection']->connect_error;
-
-		} else {
-			// success
-			$responseArray = App_Response::getResponse('200');
-			$responseArray['message'] = 'Database connection successful.';
-		}
-
 		return $responseArray;
-
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------

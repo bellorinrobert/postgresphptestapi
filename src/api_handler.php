@@ -75,6 +75,7 @@ class API_Handler {
 		}
 
 		$payloadArray = array();
+		$payloadArray['apiKey'] = $apiKey;
 		$token = JWT::encode($payloadArray, $this->apiSecretKey);
 
 		$returnArray = App_Response::getResponse('200');
@@ -89,6 +90,7 @@ class API_Handler {
 		// load up all public facing functions
 		$this->function_map = [
 			'getToken' => ['class' => 'API_Handler', 'function_name' => 'getToken'],
+			'getInterceptRules' => ['class' => 'App_API_InterceptionRule', 'function_name' => 'getInterceptRules'],
 		];
 
 	}

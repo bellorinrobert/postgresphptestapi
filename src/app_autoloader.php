@@ -19,7 +19,8 @@ $mapping = [
 
     // database classes
     'Data_Access' => './src/db_classes/data_access.php',
-    'App_API_Key' => './src/db_classes/app_api_key.php'
+    'App_API_Key' => './src/db_classes/app_api_key.php',
+    'App_API_InterceptionRule' => './src/db_classes/app_api_interception_rule.php',
     
  ];
 

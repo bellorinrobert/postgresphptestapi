@@ -23,6 +23,7 @@ if (in_array($requestMethod, ["GET", "POST", "PUT", "DELETE", "OPTIONS"])) {
 	$requestMethodArray = array();
 	$requestMethodArray = $_REQUEST;
 	$apiFunctionName = trim($_SERVER["PATH_INFO"], '/');
+	$apiFunctionName = trim($_SERVER["PATH_INFO"], "api/");
 
 	// var_dump($_REQUEST);
 	// var_dump($_POST);

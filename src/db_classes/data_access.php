@@ -56,7 +56,7 @@ abstract class Data_Access {
 			
 			if ($rowCount != 0) {
 				// move result set to an associative array
-                $rsArray = pg_fetch_all($rsData, PGSQL_ASSOC);
+                $rsArray = pg_fetch_all($rsData);
 			
 				// add array to return
 				$responseArray = App_Response::getResponse('200');

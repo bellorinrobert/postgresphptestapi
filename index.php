@@ -36,7 +36,7 @@ if (in_array($requestMethod, ["GET", "POST", "PUT", "DELETE", "OPTIONS"])) {
 
 	if (isset($postParams["apiKey"]))				{$apiKey = $postParams["apiKey"];}  
 	if (isset($_SERVER["HTTP_AUTHORIZATION"]))				{$apiToken = $_SERVER["HTTP_AUTHORIZATION"];}
-	if (isset($_SERVER["PATH_INFO"]))		{$functionName = trim($_SERVER["PATH_INFO"], '/');}
+	if (isset($_SERVER["PATH_INFO"]))		{$functionName = $apiFunctionName;}
 	if (isset($requestMethodArray['apiFunctionParams']))	{$functionParams = $requestMethodArray['apiFunctionParams'];}
 
 	// decode the function parameters array.

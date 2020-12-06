@@ -8,19 +8,19 @@ abstract class Data_Access {
 
 		// we'll move the DB credentials into an INI file in the next lesson and create an app setup class that 
 		// defines all constants from an app_config database table.
-		// define("CONST_DB_HOST", "suleiman.db.elephantsql.com");  // update with the location of your MySQL host.
-		// define("CONST_DB_USERNAME", "blzsmbxf");
-		// define("CONST_DB_PASSWORD", "k_X_nbcV7kiPsQ0d7i1fRBYUPVKmecAg");
-		// define("CONST_DB_SCHEMA", "blzsmbxf");
-		// define("CONST_DB_PORT", 5432);
-		// define("CONST_DB_OPTIONS", "dbname=test user=lamb password=bar");
-
-		define("CONST_DB_HOST", "192.168.253.252");  // update with the location of your MySQL host.
-		define("CONST_DB_USERNAME", "livigent");
-		define("CONST_DB_PASSWORD", "XJ2PHD");
-		define("CONST_DB_SCHEMA", "livigent_ver_232_64");
-		define("CONST_DB_PORT", 9001);
+		define("CONST_DB_HOST", "suleiman.db.elephantsql.com");  // update with the location of your MySQL host.
+		define("CONST_DB_USERNAME", "blzsmbxf");
+		define("CONST_DB_PASSWORD", "k_X_nbcV7kiPsQ0d7i1fRBYUPVKmecAg");
+		define("CONST_DB_SCHEMA", "blzsmbxf");
+		define("CONST_DB_PORT", 5432);
 		define("CONST_DB_OPTIONS", "dbname=test user=lamb password=bar");
+
+		// define("CONST_DB_HOST", "192.168.253.252");  // update with the location of your MySQL host.
+		// define("CONST_DB_USERNAME", "livigent");
+		// define("CONST_DB_PASSWORD", "XJ2PHD");
+		// define("CONST_DB_SCHEMA", "livigent_ver_232_64");
+		// define("CONST_DB_PORT", 9001);
+		// define("CONST_DB_OPTIONS", "dbname=test user=lamb password=bar");
 		
 
 		// establish a database connection

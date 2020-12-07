@@ -86,11 +86,13 @@ class API_Handler {
 
 	//----------------------------------------------------------------------------------------------------------------------
 	private function loadFunctionMap() {
-
 		// load up all public facing functions
 		$this->function_map = [
 			'getToken' => ['class' => 'API_Handler', 'function_name' => 'getToken'],
-			'getInterceptRules' => ['class' => 'App_API_InterceptionRule', 'function_name' => 'getInterceptRules'],
+            'addInterceptionRule' => array('class' => 'App_API_InterceptionRule', 'function_name' => 'addData'),
+            'getInterceptRules' => ['class' => 'App_API_InterceptionRule', 'function_name' => 'getData'],
+            'updateInterceptionRule' => array('class' => 'App_API_InterceptionRule', 'function_name' => 'updateData'),
+            'deleteInterceptionRule' => array('class' => 'App_API_InterceptionRule', 'function_name' => 'deleteData')
 		];
 
 	}

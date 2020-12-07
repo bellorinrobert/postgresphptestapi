@@ -8,6 +8,21 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Author
 // the following constant will help ensure all other PHP files will only work as part of this API.
 if (!defined('CONST_INCLUDE_KEY')) {define('CONST_INCLUDE_KEY', 'd4e2ad09-b1c3-4d70-9a9a-0e6149302486');}
 
+
+if (!function_exists('pre')) {
+    function pre() {
+        $numargs = func_num_args();
+        $arguments = func_get_args();
+
+        echo '<pre>';
+        for ($i = 0; $i < $numargs; $i++) {
+            var_dump($arguments[$i]);
+        }
+        echo '</pre>';
+    }
+
+}
+
 // run the class autoloader
 require_once ('./src/app_autoloader.php');
 
@@ -23,7 +38,7 @@ if (in_array($requestMethod, ["GET", "POST", "PUT", "DELETE", "OPTIONS"])) {
 	$requestMethodArray = array();
 	$requestMethodArray = $_REQUEST;
 	$apiFunctionName = trim($_SERVER["PATH_INFO"], '/');
-	$apiFunctionName = trim($_SERVER["PATH_INFO"], "api/");
+	$apiFunctionName = str_replace('api/', '', $apiFunctionName);
 
 	// var_dump($_REQUEST);
 	// var_dump($_POST);

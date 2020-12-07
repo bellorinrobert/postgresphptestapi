@@ -17,7 +17,9 @@ if ((!defined('CONST_INCLUDE_KEY')) || (CONST_INCLUDE_KEY !== 'd4e2ad09-b1c3-4d7
 //----------------------------------------------------------------------------------------------------------------------
 class App_API_InterceptionRule extends Data_Access {
 
+    protected $table = 'liv2_filtering_interceptionrule';
 	protected $object_view_name = 'liv2_filtering_interceptionrule';
+	protected $pk_field = 'irule_id';
 
 	//----------------------------------------------------------------------------------------------------
 	public function __construct() {
@@ -32,7 +34,11 @@ class App_API_InterceptionRule extends Data_Access {
 	}
 
 	//----------------------------------------------------------------------------------------------------
-	public function getInterceptRules() {
+	public function getData($params)
+    {
+        if (count($params) > 0) {
+            return $this->getBy($params);
+        }
 
 		// build the query
 		$query = "SELECT * FROM " . $this->object_view_name;
@@ -51,4 +57,70 @@ class App_API_InterceptionRule extends Data_Access {
 
 	}
 
-} // end class
+	public function addData($params)
+    {
+        if (empty($params['source'])) {
+            return App_Response::getResponse('400');
+        }
+
+        $params['weight'] = $this->getMaxWeight() + 1;
+
+        return $this->insert($params);
+    }
+
+    public function updateData($params)
+    {
+        if (empty($params[$this->pk_field])) {
+            return App_Response::getResponse('400');
+        }
+
+        $id = (int) $params[$this->pk_field];
+
+        unset($params[$this->pk_field]);
+
+        $condition = array(
+            $this->pk_field => $id
+        );
+
+        if (!empty($params['weight'])) {
+            $weightRow = $this->getBy(array(
+                'weight' => $params['weight']
+            ));
+
+            if (
+                !is_null($weightRow['dataArray'])
+                and count($weightRow['dataArray']) > 0
+                and $weightRow['dataArray'][0][$this->pk_field] != $id
+            ) {
+                $query = "UPDATE {$this->table} SET weight = weight + 1 WHERE weight >= {$params['weight']}";
+                pg_query($GLOBALS['dbConnection'], $query);
+            }
+        }
+
+        return $this->edit($params, $condition, $id);
+    }
+
+    public function deleteData($params)
+    {
+        if (empty($params[$this->pk_field])) {
+            return App_Response::getResponse('400');
+        }
+
+        $id = (int) $params[$this->pk_field];
+
+        return $this->delete($id);
+    }
+
+    private function getMaxWeight()
+    {
+        $query = "SELECT MAX(weight) FROM " . $this->table;
+
+        $res = $this->getResultSetArray($query);
+
+        if ($res['success'] and count($res['dataArray']) > 0) {
+            return (int) $res['dataArray'][0]['max'];
+        }
+
+        return 0;
+    }
+}

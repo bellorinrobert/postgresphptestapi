@@ -10,9 +10,15 @@ class ConfigReader
         $this->data = parse_ini_file(self::INI_FILE, true);
     }
 
+    public function getTokenSecret()
+    {
+        return $this->data['Token']['secret'];
+    }
+
     public function getDBSettings()
     {
         return array(
+            'db_host' => $this->data['General']['db_host'],
             'db_name' => $this->data['General']['db_name'],
             'db_user' => $this->data['General']['db_user'],
             'db_pass' => $this->data['General']['db_pass'],

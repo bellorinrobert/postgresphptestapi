@@ -2,10 +2,11 @@
 
 class JWToken
 {
-    const SECRET_KEY = 'abcd123$';
+    private $config;
 
     public function __construct()
     {
+        $this->config = new ConfigReader();
     }
 
     private function getBase64UrlSignature($base64UrlHeader, $base64UrlPayload)
@@ -13,7 +14,7 @@ class JWToken
         $signature = hash_hmac(
             'sha256',
             $base64UrlHeader . "." . $base64UrlPayload,
-            self::SECRET_KEY,
+            $this->config->getTokenSecret(),
             true
         );
 

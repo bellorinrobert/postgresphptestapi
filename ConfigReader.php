@@ -2,27 +2,30 @@
 
 class ConfigReader
 {
-    const INI_FILE = '/var/livigent/etc/livigent.ini';
-    private $data = array();
+    const DB_INI_FILE = '/var/livigent/etc/livigent.ini';
+    const CONFIG_INI_FILE = 'config.ini';
 
     public function __construct()
     {
-        $this->data = parse_ini_file(self::INI_FILE, true);
     }
 
     public function getTokenSecret()
     {
-        return $this->data['Token']['secret'];
+        $data = parse_ini_file(self::CONFIG_INI_FILE, true);
+
+        return $data['Token']['secret'];
     }
 
     public function getDBSettings()
     {
+        $data =parse_ini_file(self::DB_INI_FILE, true);
+
         return array(
-            'db_host' => $this->data['General']['db_host'],
-            'db_name' => $this->data['General']['db_name'],
-            'db_user' => $this->data['General']['db_user'],
-            'db_pass' => $this->data['General']['db_pass'],
-            'db_port' => $this->data['General']['db_port']
+            'db_host' => $data['General']['db_host'],
+            'db_name' => $data['General']['db_name'],
+            'db_user' => $data['General']['db_user'],
+            'db_pass' => $data['General']['db_pass'],
+            'db_port' => $data['General']['db_port']
         );
     }
 }

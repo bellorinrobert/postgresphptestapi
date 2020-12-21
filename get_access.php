@@ -25,6 +25,19 @@ if (empty($tokenPayload)) {
     die('empty payload');
 }
 
+$expireTimestamp = strtotime('+' . $tokenPayload['expiresIn'], $tokenPayload['iat']);
+
+if ($expireTimestamp == -1 or $expireTimestamp === false) {
+    die('unable to parse expire date: +' . $tokenPayload['expiresIn']);
+}
+
+$expires = date('Y-m-d H:i:s', $expireTimestamp);
+$current = date('Y-m-d H:i:s');
+
+if ($current > $expires) {
+    die('token expired');
+}
+
 $usernameToken = $tokenPayload['data']['username'];
 $passwordToken = $tokenPayload['data']['password'];
 

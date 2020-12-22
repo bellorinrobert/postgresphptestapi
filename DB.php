@@ -11,7 +11,7 @@ class DB
     }
 
     public function connect() {
-        $options = "host={$this->credentials['db_host']}" .
+        $options = "host=127.0.0.1" .
             " port={$this->credentials['db_port']}".
             " dbname={$this->credentials['db_name']}" .
             " user={$this->credentials['db_user']}" .
@@ -41,7 +41,7 @@ class DB
             return '';
         }
 
-        $rsArray = pg_fetch_all($rsData, PGSQL_ASSOC);
+        $rsArray = pg_fetch_all($rsData);
 
         return (count($rsArray) > 0) ? $rsArray[0]['acl_user_pass'] : '';
     }

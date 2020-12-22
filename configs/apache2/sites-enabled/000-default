@@ -1,5 +1,4 @@
-
-<VirtualHost *:8000>
+<VirtualHost *:4540>
         ServerAdmin webmaster@localhost
 
         DocumentRoot /var/www/phpapis
@@ -8,10 +7,10 @@
                 AllowOverride None
         </Directory>
         <Directory /var/www/phpapis/>
-                Options Indexes FollowSymLinks MultiViews
+                Options -Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 Order allow,deny
-                allow from all
+                Allow from all
         </Directory>
 
         ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/

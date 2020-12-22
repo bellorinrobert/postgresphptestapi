@@ -34,7 +34,7 @@ class JWToken
 
     public function decrypt($token)
     {
-        $jwtArr = array_combine(['header', 'payload', 'signature'], explode('.', $token));
+        $jwtArr = array_combine(array('header', 'payload', 'signature'), explode('.', $token));
 
         $myHash = $this->getBase64UrlSignature($jwtArr['header'], $jwtArr['payload']);
 

@@ -53,9 +53,9 @@ try {
 
     $encryptedDBPass = $db->getPassByUsername($usernameToken);
 
-    $solt = getSolt($encryptedDBPass);
+    $salt = getSalt($encryptedDBPass);
 
-    $passwordTokenEncrypted = encryptPass($solt, $passwordToken);
+    $passwordTokenEncrypted = encryptPass($salt, $passwordToken);
 
     if ($encryptedDBPass != $passwordTokenEncrypted) {
         throw new \Exception('wrong password');
@@ -67,11 +67,11 @@ try {
 }
 
 // functions
-function getSolt($encryptedDBPass) {
+function getSalt($encryptedDBPass) {
     $explodedPass = explode('$', $encryptedDBPass);
     return $explodedPass[1];
 }
 
-function encryptPass($solt, $pass) {
-    return 'sha1$' . $solt . '$' . sha1($solt . $pass);
+function encryptPass($salt, $pass) {
+    return 'sha1$' . $salt . '$' . sha1($salt . $pass);
 }

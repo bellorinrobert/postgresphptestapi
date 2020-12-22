@@ -10,8 +10,8 @@ $config = new ConfigReader();
 $payload = array(
     "expiresIn" => "365 days",
     "data" => [
-        "username" => "livigent",
-        "password" => "3e4r5t6y!"
+        "username" => "robert",
+        "password" => "1234!@#$"
     ],
     "iat" => 1608322443
 );

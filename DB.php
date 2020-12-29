@@ -45,4 +45,24 @@ class DB
 
         return (count($rsArray) > 0) ? $rsArray[0]['acl_user_pass'] : '';
     }
+
+    public function getARow($query)
+    {
+        $rsData = pg_query($this->conn, $query);
+
+        $rowCount = pg_num_rows($rsData);
+
+        if (empty($rowCount)) {
+            return null;
+        }
+
+        $rsArray = pg_fetch_all($rsData);
+
+        return (count($rsArray) > 0) ? $rsArray[0] : null;
+    }
+
+    public function execQuery($query)
+    {
+        pg_query($this->conn, $query);
+    }
 }

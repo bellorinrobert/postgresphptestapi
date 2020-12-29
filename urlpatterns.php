@@ -62,17 +62,31 @@ try {
         throw new \Exception('wrong password');
     }
 
-    $method = isset($_POST['method']) ? $_POST['method'] : '';
-    $urlpatternListId = isset($_POST['urlpattern_list_id']) ? $_POST['urlpattern_list_id'] : '';
-    $username = isset($_POST['username']) ? $_POST['username'] : '';
-    $text = isset($_POST['urlpattern_list_text']) ? $_POST['urlpattern_list_text'] : '';
-    $oldText = isset($_POST['old_urlpattern_list_text']) ? $_POST['old_urlpattern_list_text'] : '';
+    // url processor part //
+
+    $bodyRequest = \json_decode(file_get_contents('php://input'), true);
+
+    if (is_null($bodyRequest)) {
+        throw new \Exception('unable to json_decode request body, json is invalid');
+    }
+    if (!isset($bodyRequest['query'])) {
+        throw new \Exception('No "query" in body params');
+    }
+    if (!isset($bodyRequest['data'])) {
+        throw new \Exception('No "data" in body params');
+    }
+
+    $ruleLabel = $bodyRequest['query']['rule_label'];
+    $method = $bodyRequest['data']['type'];
+    $username = $bodyRequest['data']['username'];
+    $text = $bodyRequest['data']['urlpattern_list_text'];
+    $oldText = $bodyRequest['data']['old_urlpattern_list_text'];
 
     if (empty($method)) {
         throw new \Exception('method is empty');
     }
-    if (empty($urlpatternListId)) {
-        throw new \Exception('urlpattern_list_id is empty');
+    if (empty($ruleLabel)) {
+        throw new \Exception('rule_label is empty');
     }
     if (empty($text)) {
         throw new \Exception('urlpattern_list_text is empty');
@@ -81,7 +95,7 @@ try {
         throw new \Exception('text or old_text cant be empty in update method');
     }
 
-    $processor = new UrlPatternProcessor($db, $urlpatternListId, $username);
+    $processor = new UrlPatternProcessor($db, $ruleLabel, $username);
 
     if ('insert' == $method) {
         $processor->insert($text);

@@ -16,14 +16,36 @@ class UrlPatternProcessor
     protected $formattedData;
     protected $db;
 
-    public function __construct($db, $patternListId, $userName = '')
+    public function __construct($db, $ruleLabel, $userName = '')
     {
         $this->db = $db;
-        $this->patternListId = $patternListId;
+        $this->patternListId = 0;
         $this->userName = str_replace('@', '', $userName);
 
+        $this->getPatternListId($ruleLabel);
         $this->loadDataFromDB();
         $this->transformData();
+    }
+
+    protected function getPatternListId($ruleLabel)
+    {
+        $query = "SELECT p.urlpattern_list_id
+            FROM liv2_rules_to_urlpattern p
+            INNER JOIN liv2_rules r ON r.rule_id = p.rule_id
+            WHERE r.rule_label = '{$ruleLabel}'
+            LIMIT 1";
+
+        $row = $this->db->getARow($query);
+
+        if (is_null($row)) {
+            throw new \Exception('unable to find record in db: ' . $query);
+        }
+
+        if (empty($row['urlpattern_list_id'])) {
+            throw new \Exception('empty data in urlpattern_list_id column');
+        }
+
+        $this->patternListId = $row['urlpattern_list_id'];
     }
 
     protected function loadDataFromDB()

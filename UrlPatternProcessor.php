@@ -76,6 +76,8 @@ class UrlPatternProcessor
             throw new \Exception('unable to transformBackToString, result is empty');
         }
 
+        $value = pg_escape_string($value);
+
         $query = "UPDATE liv2_rules_urlpattern_list 
             SET urlpattern_list_text = '{$value}'
             WHERE urlpattern_list_id = {$this->patternListId} ";
@@ -146,17 +148,29 @@ class UrlPatternProcessor
             : self::NAME_NOT_FOUND;
     }
 
+    private function isUrlExists($source, $text)
+    {
+        return in_array($text, $source);
+    }
 
     public function insert($text)
     {
         switch($this->getSearchStatus()) {
             case self::GLOBAL_FOUND:
+                if ($this->isUrlExists($this->formattedData[self::GLOBAL_SEARCH_KEY], $text)) {
+                    break;
+                }
+
                 $this->formattedData[self::GLOBAL_SEARCH_KEY][] = $text;
                 break;
             case self::GLOBAL_NOT_FOUND:
                 $this->formattedData[self::GLOBAL_SEARCH_KEY] = array($text);
                 break;
             case self::NAME_FOUND:
+                if ($this->isUrlExists($this->formattedData[$this->userName], $text)) {
+                    break;
+                }
+
                 $this->formattedData[$this->userName][] = $text;
                 break;
             case self::NAME_NOT_FOUND:

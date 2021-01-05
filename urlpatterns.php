@@ -79,8 +79,8 @@ try {
     $ruleLabel = $bodyRequest['query']['rule_label'];
     $method = $bodyRequest['data']['type'];
     $username = $bodyRequest['data']['username'];
-    $text = $bodyRequest['data']['urlpattern_list_text'];
-    $oldText = $bodyRequest['data']['old_urlpattern_list_text'];
+    $text = $bodyRequest['data']['new_url'];
+    $oldText = $bodyRequest['data']['old_url'];
 
     if (empty($method)) {
         throw new \Exception('method is empty');
@@ -89,10 +89,10 @@ try {
         throw new \Exception('rule_label is empty');
     }
     if (empty($text)) {
-        throw new \Exception('urlpattern_list_text is empty');
+        throw new \Exception('new_url is empty');
     }
     if ('update' == $method and (empty($text) or empty($oldText))) {
-        throw new \Exception('text or old_text cant be empty in update method');
+        throw new \Exception('new_url or old_url cant be empty in update method');
     }
 
     $processor = new UrlPatternProcessor($db, $ruleLabel, $username);

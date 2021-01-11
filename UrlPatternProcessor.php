@@ -114,6 +114,9 @@ class UrlPatternProcessor
     {
         $isFirstLetterName = ($data[0] == '@');
 
+        $data = str_replace("\r\n", self::LINE_DELIMITER, $data);
+        $data = str_replace('\r\n', self::LINE_DELIMITER, $data);
+
         $exploded = explode('@', $data);
 
         $result = array();

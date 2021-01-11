@@ -33,7 +33,7 @@ class UrlPatternProcessor
         $query = "SELECT p.urlpattern_list_id
             FROM liv2_rules_to_urlpattern p
             INNER JOIN liv2_rules r ON r.rule_id = p.rule_id
-            WHERE r.rule_label like '%{$ruleLabel}' and r.rule_type='urlpattern_list'";
+            WHERE r.rule_remote_url like '%{$ruleLabel}' and r.rule_type='urlpattern_list'";
 
         $rows = $this->db->getAllAssoc($query);
 
@@ -114,7 +114,7 @@ class UrlPatternProcessor
     {
         $isFirstLetterName = ($data[0] == '@');
 
-        $exploded = explode('@', $$data);
+        $exploded = explode('@', $data);
 
         $result = array();
 

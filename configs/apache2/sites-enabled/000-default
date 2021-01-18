@@ -1,12 +1,12 @@
 <VirtualHost *:4540>
         ServerAdmin webmaster@localhost
 
-        DocumentRoot /var/www/phpapis
+        DocumentRoot /var/www/meshapi
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /var/www/phpapis/>
+        <Directory /var/www/meshapi/>
                 Options -Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 Order allow,deny
